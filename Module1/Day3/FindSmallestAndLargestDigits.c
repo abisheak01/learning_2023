@@ -1,60 +1,80 @@
 #include <stdio.h>
+#include <limits.h> 
 
-int getSmallestDigit(int num) {
-    int smallest = 9;
-
-    while (num > 0) {
-        int digit = num % 10;
-        if (digit < smallest) {
-            smallest = digit;
+void findLargestSmallest(int digits[], int numDigits, int *largest, int *smallest) {
+    *largest = INT_MIN;
+    *smallest = INT_MAX;
+    
+    for (int i = 0; i < numDigits; i++) {
+        if (digits[i] > *largest) {
+            *largest = digits[i];
         }
-        num /= 10;
+        if (digits[i] < *smallest) {
+            *smallest = digits[i];
+        }
     }
-
-    return smallest;
 }
 
-int getLargestDigit(int num) {
-    int largest = 0;
-
-    while (num > 0) {
-        int digit = num % 10;
-        if (digit > largest) {
-            largest = digit;
-        }
-        num /= 10;
+void processNumber(int number) {
+    if (number < 10) {
+        printf("Invalid number!\n\n");
+        return;
     }
-
-    return largest;
+    
+    int maxDigits = 10; 
+    int digits[maxDigits]; 
+    
+    
+    for (int i = 0; i < maxDigits; i++) {
+        digits[i] = 0;
+    }
+    
+    
+    int numDigits = 0;
+    int tempNumber = number;
+    while (tempNumber != 0) {
+        tempNumber /= 10;
+        numDigits++;
+    }
+    
+    
+    tempNumber = number;
+    int index = numDigits - 1;
+    while (tempNumber != 0) {
+        digits[index] = tempNumber % 10;
+        tempNumber /= 10;
+        index--;
+    }
+    
+    
+    printf("Digits: ");
+    for (int i = 0; i < numDigits; i++) {
+        printf("%d ", digits[i]);
+    }
+    printf("\n");
+    
+    
+    int largest, smallest;
+    findLargestSmallest(digits, numDigits, &largest, &smallest);
+    
+    
+    printf("Largest number: %d\n", largest);
+    printf("Smallest number: %d\n\n", smallest);
 }
 
 int main() {
-    int n;
-    printf("Enter the number of values: ");
-    scanf("%d", &n);
-
-    int num;
-    printf("Enter %d numbers:\n", n);
-
-    int smallest = 9;
-    int largest = 0;  
-
-    for (int i = 0; i < n; i++) {
-        scanf("%d", &num);
-
-        int smallestDigit = getSmallestDigit(num);
-        if (smallestDigit < smallest) {
-            smallest = smallestDigit;
-        }
-
-        int largestDigit = getLargestDigit(num);
-        if (largestDigit > largest) {
-            largest = largestDigit;
-        }
+    int numNumbers;
+    printf("Enter the number of numbers: ");
+    scanf("%d", &numNumbers);
+    
+    
+    for (int count = 1; count <= numNumbers; count++) {
+        int number;
+        printf("Enter number %d: ", count);
+        scanf("%d", &number);
+        
+        processNumber(number);
     }
-
-    printf("Smallest digit: %d\n", smallest);
-    printf("Largest digit: %d\n", largest);
-
+    
     return 0;
 }
